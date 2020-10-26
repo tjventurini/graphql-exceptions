@@ -1,0 +1,34 @@
+{
+    "name": "tjventurini/graphql-exceptions",
+    "description": "Client save exceptions for lighthouse-php graphql implementation.",
+    "type": "package",
+    "license": "MIT",
+    "tags": [
+        "laravel",
+        "package",
+        "debug",
+        "graphql",
+        "graphql-exceptions"
+    ],
+    "authors": [
+        {
+            "name": "Thomas Venturini",
+            "email": "thomas@venturini.codes"
+        }
+    ],
+    "require": {
+        "illuminate/support": "^6.0|^7.0|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tjventurini\\GraphQLExceptions\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Tjventurini\\GraphQLExceptions\\GraphQLExceptionServiceProvider"
+            ]
+        }
+    }
+}
