@@ -15,6 +15,8 @@ composer require tjventurini/graphql-exceptions
 Extend the `ClientSaveInternalGraphQLException` or throw it directly.
 
 ```php
+use Tjventurini\GraphQLExceptions\Exceptions\ClientSaveInternalGraphQLException;
+
 try {
     throw new Exception('omg! what happened?!');
 } catch (Exception $Exception) {
@@ -55,6 +57,10 @@ This will result in the following output.
 Extend the `ClientSaveValidationGraphQLException` or throw it directly.
 
 ```php
+use Illuminate\Validation\ValidationException;
+use Tjventurini\GraphQLExceptions\Exceptions\ClientSaveInternalGraphQLException;
+use Tjventurini\GraphQLExceptions\Exceptions\ClientSaveValidationGraphQLException;
+
 try {
     $data = ['foo' => 'bar'];
 
@@ -63,9 +69,9 @@ try {
     ]);
 
     if ($Validator->fails()) {
-        throw new ValidationValidationException($Validator);
+        throw new ValidationException($Validator);
     }
-} catch (ValidationValidationException $Exception) {
+} catch (ValidationException $Exception) {
     throw new ClientSaveValidationGraphQLException($Exception);
 } catch (\Exception $Exception) {
     throw new ClientSaveInternalGraphQLException($Exception);
