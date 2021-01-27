@@ -16,7 +16,7 @@ class ClientSaveInternalGraphQLException extends Exception implements RendersErr
     /**
      * Constructor of this exception.
      *
-     * @param Tjventurini\GraphQLExceptions\Exceptions\Throwable $Exception
+     * @param  Tjventurini\GraphQLExceptions\Exceptions\Throwable $Exception
      * @return void
      */
     public function __construct(Throwable $Exception)
