@@ -2,10 +2,11 @@
 
 namespace Tjventurini\GraphQLExceptions;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Tjventurini\GraphQLExceptions\Services\GraphQLExceptionService;
 
-class GraphQLExceptionServiceProvider extends ServiceProvider
+class ServiceProvider extends BaseServiceProvider
 {
     /**
      * Register services.
@@ -14,7 +15,9 @@ class GraphQLExceptionServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton('graphql-exceptions-service', function ($app) {
+            return new GraphQLExceptionService();
+        });
     }
 
     /**
@@ -24,7 +27,16 @@ class GraphQLExceptionServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // setup translation files
         $this->setupTranslations();
+
+        // setup package config
+        $this->mergeConfigFrom(__DIR__ . '/../config/graphql-exceptions.php', 'graphql-exceptions');
+
+        // enable package config to be published
+        $this->publishes([
+            __DIR__ . '/../config/graphql-exceptions.php', config_path('graphql-exceptions.php')
+        ]);
     }
 
     /**

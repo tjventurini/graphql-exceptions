@@ -27,7 +27,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Tjventurini\\GraphQLExceptions\\GraphQLExceptionServiceProvider"
+                "Tjventurini\\GraphQLExceptions\\ServiceProvider"
             ]
         }
     }
