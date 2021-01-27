@@ -10,103 +10,44 @@ composer require tjventurini/graphql-exceptions
 
 ## Usage
 
-### Intenral Error
-
-Extend the `ClientSaveInternalGraphQLException` or throw it directly.
+The `GraphQLExceptions` facade provides a convenient `handle` method that accepts a `Closure` that you can use to put your logic in. If a thrown error matches the exceptions provided in the configuration it will resolve it to a client save graphql exception.
 
 ```php
-use Tjventurini\GraphQLExceptions\Exceptions\ClientSaveInternalGraphQLException;
+use Tjventurini\GraphQLExceptions\Facades\GraphqlExceptions;
 
-try {
-    throw new Exception('omg! what happened?!');
-} catch (Exception $Exception) {
-    ClientSaveInternalGraphQLException($Exception);
-}
+GraphQLExceptions::handle(function() {
+    // your logic
+});
 ```
 
-This will result in the following output.
+## Configuration
 
-```json
-{
-  "errors": [
-    {
-      "message": "There was an internal error!",
-      "extensions": {
-        "reason": "omg! what happened?!",
-        "category": "internal"
-      },
-      "locations": [
-        {
-          "line": 2,
-          "column": 3
-        }
-      ],
-      "path": [
-        "someQuery"
-      ]
-    }
-  ],
-  "data": {
-    "someQuery": null
-  }
-}
-```
-
-### Validation Exception
-
-Extend the `ClientSaveValidationGraphQLException` or throw it directly.
+In the `graphql-exceptions` configuration you can define the default exception to throw and an exception map that we use to resolve the thrown exception with a client save exception.
 
 ```php
-use Illuminate\Validation\ValidationException;
-use Tjventurini\GraphQLExceptions\Exceptions\ClientSaveInternalGraphQLException;
-use Tjventurini\GraphQLExceptions\Exceptions\ClientSaveValidationGraphQLException;
+    /*
+     |--------------------------------------------------------------------------
+     | Exception Map
+     |--------------------------------------------------------------------------
+     |
+     | In the following array you can add exceptions to be resolved.
+     |
+    */
 
-try {
-    $data = ['foo' => 'bar'];
+    'exception_map' => [
+        Illuminate\Validation\ValidationException::class            => Tjventurini\GraphQLExceptions\Exceptions\ClientSaveValidationGraphQLException::class,
+        Illuminate\Database\Eloquent\ModelNotFoundException::class  => Tjventurini\GraphQLExceptions\Exceptions\ClientSaveModelNotFoundGraphQLException::class,
+    ],
 
-    $Validator = Validator::make($data, [
-        'foo' => 'required|in:baz'
-    ]);
+    /*
+     |--------------------------------------------------------------------------
+     | Default Exception
+     |--------------------------------------------------------------------------
+     |
+     | The following exception will be thrown when no matching exception was
+     | found in the exception map.
+     |
+    */
 
-    if ($Validator->fails()) {
-        throw new ValidationException($Validator);
-    }
-} catch (ValidationException $Exception) {
-    throw new ClientSaveValidationGraphQLException($Exception);
-} catch (\Exception $Exception) {
-    throw new ClientSaveInternalGraphQLException($Exception);
-}
-```
-
-This will result in the following output.
-
-```json
-{
-  "errors": [
-    {
-      "message": "There was a validation error!",
-      "extensions": {
-        "reason": "The given data was invalid.",
-        "errors": {
-          "foo": [
-            "The selected foo is invalid."
-          ]
-        },
-        "category": "validation"
-      },
-      "locations": [
-        {
-          "line": 2,
-          "column": 3
-        }
-      ],
-      "path": [
-        "someMutation"
-      ]
-    }
-  ],
-  "data": {
-    "someMutation": null
-  }
-}
+    'default_exception' => Tjventurini\GraphQLExceptions\Exceptions\ClientSaveInternalGraphQLException::class,
 ```
