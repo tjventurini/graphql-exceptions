@@ -17,7 +17,7 @@ class GraphQLExceptionService
      * @throws BindingResolutionException
      * @throws Throwable
      */
-    public function handle(Closure $callback)
+    public function wrap(Closure $callback)
     {
         // call the closure within a try catch block
         //   to catch any exceptions that might occur.
@@ -40,23 +40,36 @@ class GraphQLExceptionService
      */
     public function throwException(Throwable $Exception): void
     {
+        // resolve the exception against the exception map
+        $GraphQLException = $this->resolveException($Exception);
+
+        // throw the exception we got back
+        throw new $GraphQLException($Exception);
+    }
+
+    /**
+     * Resolve the exception against the exception map
+     *
+     * @param  Throwable                  $Exception
+     * @return String
+     * @throws BindingResolutionException
+     */
+    public function resolveException(Throwable $Exception): String
+    {
         // get the exceptions map from the configuration
-        $map = collect(config('graphql-exceptions.exception_map'));
+        $map = collect(config('graphql-exceptions.exception_map', []));
 
         // if the given exception has a matching candidate
         //   we throw that.
         $ExceptionClass = get_class($Exception);
         if ($map->keys()->contains($ExceptionClass)) {
             // get the exception from the map
-            $GraphQLException = $map->get($ExceptionClass);
-            // throw the matching graphql exception
-            throw new $GraphQLException($Exception);
+            return $map->get($ExceptionClass);
         }
 
         // if we could not find a matching exception, then
         //   we throw the default exception provided in
         //   the configuration
-        $GraphQLException = config('graphql-exceptions.default_exception');
-        throw new $GraphQLException($Exception);
+        return config('graphql-exceptions.default_exception');
     }
 }

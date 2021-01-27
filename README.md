@@ -10,12 +10,12 @@ composer require tjventurini/graphql-exceptions
 
 ## Usage
 
-The `GraphQLExceptions` facade provides a convenient `handle` method that accepts a `Closure` that you can use to put your logic in. If a thrown error matches the exceptions provided in the configuration it will resolve it to a client save graphql exception.
+The `GraphQLExceptions` facade provides a convenient `wrap` method that accepts a `Closure` that you can use to put your logic in. If a thrown error matches the exceptions provided in the configuration it will resolve it to a client save graphql exception.
 
 ```php
 use Tjventurini\GraphQLExceptions\Facades\GraphqlExceptions;
 
-GraphQLExceptions::handle(function() {
+GraphQLExceptions::wrap(function() {
     // your logic
 });
 ```
