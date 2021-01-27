@@ -53,6 +53,8 @@ class GraphQLExceptionService
             throw new $GraphQLException($Exception);
         }
 
+        ddi($ExceptionClass);
+
         // if we could not find a matching exception, then
         //   we throw the default exception provided in
         //   the configuration

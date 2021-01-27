@@ -21,7 +21,8 @@ return [
     */
 
     'exception_map' => [
-        Illuminate\Validation\ValidationException::class => Tjventurini\GraphQLExceptions\Exceptions\ClientSaveValidationGraphQLException::class,
+        Illuminate\Validation\ValidationException::class            => Tjventurini\GraphQLExceptions\Exceptions\ClientSaveValidationGraphQLException::class,
+        Illuminate\Database\Eloquent\ModelNotFoundException::class  => Tjventurini\GraphQLExceptions\Exceptions\ClientSaveModelNotFoundGraphQLException::class,
     ],
 
     /*
