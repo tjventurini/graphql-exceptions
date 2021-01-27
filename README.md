@@ -37,6 +37,7 @@ In the `graphql-exceptions` configuration you can define the default exception t
     'exception_map' => [
         Illuminate\Validation\ValidationException::class            => Tjventurini\GraphQLExceptions\Exceptions\ClientSaveValidationGraphQLException::class,
         Illuminate\Database\Eloquent\ModelNotFoundException::class  => Tjventurini\GraphQLExceptions\Exceptions\ClientSaveModelNotFoundGraphQLException::class,
+        Illuminate\Auth\AuthenticationException::class              => Tjventurini\GraphQLExceptions\Exceptions\ClientSaveAuthenticationGraphQLException::class,
     ],
 
     /*
