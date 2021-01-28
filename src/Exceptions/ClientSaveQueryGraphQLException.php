@@ -9,9 +9,19 @@ use Nuwave\Lighthouse\Exceptions\RendersErrorsExtensions;
 class ClientSaveQueryGraphQLException extends Exception implements RendersErrorsExtensions
 {
     /**
-    * @var @string
+    * @var string
     */
     protected $reason;
+
+    /**
+     * @var string
+     */
+    protected $sql;
+
+    /**
+     * @var string
+     */
+    protected $code;
 
     /**
      * Constructor of this exception.
@@ -22,13 +32,16 @@ class ClientSaveQueryGraphQLException extends Exception implements RendersErrors
     public function __construct(QueryException $Exception)
     {
         // pass general error message, code and previous exception to Exception constructor.
-        parent::__construct(trans('graphql-exceptions::errors.internal'), $Exception->getCode(), $Exception);
+        parent::__construct(trans('graphql-exceptions::errors.database_query'));
 
         // save the real error message as reason
         $this->reason = $Exception->getMessage();
 
         // save the sql query
         $this->sql = $Exception->getSql();
+
+        // save error code for further investigations
+        $this->code = $Exception->getCode();
     }
 
     /**
@@ -52,7 +65,7 @@ class ClientSaveQueryGraphQLException extends Exception implements RendersErrors
      */
     public function getCategory(): string
     {
-        return 'internal';
+        return 'database';
     }
 
     /**
@@ -64,8 +77,10 @@ class ClientSaveQueryGraphQLException extends Exception implements RendersErrors
     public function extensionsContent(): array
     {
         return [
-            'reason' => $this->reason,
-            'sql'    => $this->sql,
+            'reason'  => $this->reason,
+            'sql'     => $this->sql,
+            'code'    => $this->code,
         ];
     }
 }
+
