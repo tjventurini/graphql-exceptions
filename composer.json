@@ -21,7 +21,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Tjventurini\\GraphQLExceptions\\": "src/"
+            "Tjventurini\\GraphQLExceptions\\": "src",
+            "Tjventurini\\GraphQLExceptions\\Tests\\": "tests"
         }
     },
     "extra": {
